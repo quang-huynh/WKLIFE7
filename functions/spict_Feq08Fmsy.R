@@ -64,6 +64,6 @@ SPiCT_Feq08Fmsy <- structure(
           TAC <- exp(rnorm(reps, predcatch[2], predcatch[2] * 0.1))
         }
         DLMtool:::TACfilter(TAC)
-    },
-    class = "Output"
+    }, 
+   class = "Output"
 )
