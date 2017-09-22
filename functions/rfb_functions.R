@@ -65,8 +65,7 @@ f_BHE <- function(CAL, CAL_bins, Linf, K, M) {
   
   Zcurr <- K * (Linf - Lmean)/(Lmean - Lc)
   res <- M/(Zcurr - M)
-  res[is.infinite(res) || res < 0] <- NA
-  #if(all(is.na(res))) res <- rep(1, length(Linf))
+  res[is.infinite(res) | res < 0 | is.na(res)] <- 1
   return(res)
 }
 
@@ -89,8 +88,7 @@ f_GH <- function(CAL, CAL_bins, LFS, Linf, K, M, wla, wlb) {
   }
     
   res <- F01/(Zcurr - M)
-  res[is.infinite(res) || res < 0] <- NA
-  #if(all(is.na(res))) res <- rep(1, length(Linf))
+  res[is.infinite(res) | res < 0 | is.na(res)] <- 1
   return(res)
 }
 
@@ -119,8 +117,7 @@ f_GHeffort <- function(CAL, CAL_bins, effort, Linf, K, M, t0, wla, wlb, LFS) {
   }
   
   res <- F01/(Zcurr - M)
-  res[is.infinite(res) || res < 0] <- NA
-  #if(all(is.na(res))) res <- rep(1, length(Linf))
+  res[is.infinite(res) | res < 0 | is.na(res)] <- 1
   return(res)
 }
 
