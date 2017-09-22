@@ -26,8 +26,8 @@ library(Rcpp)
 source('functions/rfb_functions.R')
 source('functions/meanlength_fun.R')
 sourceCpp('functions/ML_functions.cpp')
-source('category3_HCR.R')
-source('category4_HCR.R')
+source('functions/category3_HCR.R')
+source('functions/category4_HCR.R')
 
 ########### Preliminary MPs
 ## Update advice every 2 or 3 years
