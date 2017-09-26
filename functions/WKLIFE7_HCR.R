@@ -29,6 +29,36 @@ sourceCpp('functions/ML_functions.cpp')
 source('functions/category3_HCR.R')
 source('functions/category4_HCR.R')
 
+########### Calculate Blim from MSE
+# Blim is the max(0.2 * B0, B such that R/R0 = 0.8)
+# Biomass refers to spawning stock biomass
+calculate_Blim <- function(steepness, B0, xR = 0.8) {
+  h <- steepness
+  Blim.SR <- xR * B0 * (1-h) /(4*h - xR * (5*h - 1))
+  Blim <- ifelse(Blim.SR < 0.2*B0, 0.2*B0, Blim.SR)
+  return(Blim)
+}
+
+get_Blim <- function(MSEobj, xR = 0.8) {
+  nm <- MSEobj@nMPs
+  nsim <- MSEobj@nsim
+  proyears <- MSEobj@proyears
+  
+  Blim <- calculate_Blim(steepness = MSEobj@OM$hs, B0 = MSEobj@OM$SSBMSY/MSEobj@OM$SSBMSY_SSB0, xR = xR)
+  PBlim <- matrix(NA, nm, nsim)
+  
+  for(m in 1:nm) {
+    for(j in 1:nsim) PBlim[m, j] <- sum(MSEobj@SSB[j, m, ] < Blim[j])/proyears * 100
+  }
+  Blim_BMSY <- mean(Blim/MSEobj@OM$SSBMSY)
+  
+  MP.summary <- data.frame(MP = MSEobj@MPs, PBlim = round(apply(PBlim, 1, mean, na.rm = T), 2),
+                           stdev = round(apply(PBlim, 1, sd, na.rm = T), 2))
+  OM.summary <- data.frame(Blim_BMSY = mean(Blim/MSEobj@OM$SSBMSY), stdev = sd(Blim/MSEobj@OM$SSBMSY))
+  
+  return(list(MP.summary = MP.summary, OM.summary = OM.summary))
+}
+
 ########### Preliminary MPs
 ## Update advice every 2 or 3 years
 Two_Over_Three_Capped <- function(x, Data, reps) {
