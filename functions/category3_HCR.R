@@ -3,9 +3,9 @@
 ######### LBI MPs
 r23_fLBI_cat3 <- function(x, Data, reps) {
   dependencies = "Data@Cat, Data@CV_Cat, Data@Ind, Data@CV_Ind, Data@CAL, Data@CAL_bins,
-  Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort,
-  Data@Iref, Data@CV_Iref"
-  Ind5 <- sample_index(x, Data, reps, nyrs = 5)
+  Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort"
+  index.samp <- sample_index(x, Data, reps)
+  Ind5 <- index.samp[(nrow(index.samp)-4):nrow(index.samp), ]
   r <- r_2over3(Ind5, uncertainty_cap = FALSE)
   
   Linfvec <- trlnorm(reps, Data@vbLinf[x], Data@CV_vbLinf[x])
@@ -19,7 +19,7 @@ r23_fLBI_cat3 <- function(x, Data, reps) {
   
   Icurr.vec <- Ind5[5, ]
   Iref.vec <- trlnorm(reps, Data@Iref[x], Data@CV_Iref[x])
-  b <- b_cat3(Icurr.vec, Iref.vec)
+  b <- b_cat3(index.samp)
   
   Cc <- trlnorm(reps, Data@Cat[x, length(Data@Cat[x, ])], Data@CV_Cat[x])
   TAC <- Cc * r * f * b
@@ -31,9 +31,9 @@ environment(r23_fLBI_cat3) <- asNamespace("DLMtool")
 
 r5sl_fLBI_cat3 <- function(x, Data, reps) {
   dependencies = "Data@Cat, Data@CV_Cat, Data@Ind, Data@CV_Ind, Data@CAL, Data@CAL_bins,
-  Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort,
-  Data@Iref, Data@CV_Iref"
-  Ind5 <- sample_index(x, Data, reps, nyrs = 5)
+  Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort"
+  index.samp <- sample_index(x, Data, reps)
+  Ind5 <- index.samp[(nrow(index.samp)-4):nrow(index.samp), ]
   r <- r_expIslope(Ind5)
   
   Linfvec <- trlnorm(reps, Data@vbLinf[x], Data@CV_vbLinf[x])
@@ -47,7 +47,7 @@ r5sl_fLBI_cat3 <- function(x, Data, reps) {
   
   Icurr.vec <- Ind5[5, ]
   Iref.vec <- trlnorm(reps, Data@Iref[x], Data@CV_Iref[x])
-  b <- b_cat3(Icurr.vec, Iref.vec)
+  b <- b_cat3(index.samp)
   
   Cc <- trlnorm(reps, Data@Cat[x, length(Data@Cat[x, ])], Data@CV_Cat[x])
   TAC <- Cc * r * f * b
@@ -60,9 +60,9 @@ environment(r5sl_fLBI_cat3) <- asNamespace("DLMtool")
 
 r23_fBHE_cat3 <- function(x, Data, reps) {
   dependencies = "Data@Cat, Data@CV_Cat, Data@Ind, Data@CV_Ind, Data@CAL, Data@CAL_bins,
-  Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort,
-  Data@Iref, Data@CV_Iref"
-  Ind5 <- sample_index(x, Data, reps, nyrs = 5)
+  Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort"
+  index.samp <- sample_index(x, Data, reps)
+  Ind5 <- index.samp[(nrow(index.samp)-4):nrow(index.samp), ]
   r <- r_2over3(Ind5, uncertainty_cap = FALSE)
   
   Linfvec <- trlnorm(reps, Data@vbLinf[x], Data@CV_vbLinf[x])
@@ -76,7 +76,7 @@ r23_fBHE_cat3 <- function(x, Data, reps) {
   
   Icurr.vec <- Ind5[5, ]
   Iref.vec <- trlnorm(reps, Data@Iref[x], Data@CV_Iref[x])
-  b <- b_cat3(Icurr.vec, Iref.vec)
+  b <- b_cat3(index.samp)
     
   Cc <- trlnorm(reps, Data@Cat[x, length(Data@Cat[x, ])], Data@CV_Cat[x])
   TAC <- Cc * r * f * b
@@ -89,9 +89,9 @@ environment(r23_fBHE_cat3) <- asNamespace("DLMtool")
 
 r5sl_fBHE_cat3 <- function(x, Data, reps) {
   dependencies = "Data@Cat, Data@CV_Cat, Data@Ind, Data@CV_Ind, Data@CAL, Data@CAL_bins,
-  Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort,
-  Data@Iref, Data@CV_Iref"
-  Ind5 <- sample_index(x, Data, reps, nyrs = 5)
+  Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort"
+  index.samp <- sample_index(x, Data, reps)
+  Ind5 <- index.samp[(nrow(index.samp)-4):nrow(index.samp), ]
   r <- r_expIslope(Ind5)
   
   Linfvec <- trlnorm(reps, Data@vbLinf[x], Data@CV_vbLinf[x])
@@ -105,7 +105,7 @@ r5sl_fBHE_cat3 <- function(x, Data, reps) {
   
   Icurr.vec <- Ind5[5, ]
   Iref.vec <- trlnorm(reps, Data@Iref[x], Data@CV_Iref[x])
-  b <- b_cat3(Icurr.vec, Iref.vec)
+  b <- b_cat3(index.samp)
     
   Cc <- trlnorm(reps, Data@Cat[x, length(Data@Cat[x, ])], Data@CV_Cat[x])
   TAC <- Cc * r * f * b
@@ -119,9 +119,9 @@ environment(r5sl_fBHE_cat3) <- asNamespace("DLMtool")
 ######### GH MPs
 r23_fGH_cat3 <- function(x, Data, reps) {
   dependencies = "Data@Cat, Data@CV_Cat, Data@Ind, Data@CV_Ind, Data@CAL, Data@CAL_bins,
-  Data@LFS, Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort,
-  Data@Iref, Data@CV_Iref"
-  Ind5 <- sample_index(x, Data, reps, nyrs = 5)
+  Data@LFS, Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort"
+  index.samp <- sample_index(x, Data, reps)
+  Ind5 <- index.samp[(nrow(index.samp)-4):nrow(index.samp), ]
   r <- r_2over3(Ind5, uncertainty_cap = FALSE)
   
   Linfvec <- trlnorm(reps, Data@vbLinf[x], Data@CV_vbLinf[x])
@@ -135,7 +135,7 @@ r23_fGH_cat3 <- function(x, Data, reps) {
   
   Icurr.vec <- Ind5[5, ]
   Iref.vec <- trlnorm(reps, Data@Iref[x], Data@CV_Iref[x])
-  b <- b_cat3(Icurr.vec, Iref.vec)
+  b <- b_cat3(index.samp)
     
   Cc <- trlnorm(reps, Data@Cat[x, length(Data@Cat[x, ])], Data@CV_Cat[x])
   TAC <- Cc * r * f * b
@@ -146,9 +146,9 @@ environment(r23_fGH_cat3) <- asNamespace("DLMtool")
 
 r5sl_fGH_cat3 <- function(x, Data, reps) {
   dependencies = "Data@Cat, Data@CV_Cat, Data@Ind, Data@CV_Ind, Data@CAL, Data@CAL_bins,
-  Data@LFS, Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort,
-  Data@Iref, Data@CV_Iref"
-  Ind5 <- sample_index(x, Data, reps, nyrs = 5)
+  Data@LFS, Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort"
+  index.samp <- sample_index(x, Data, reps)
+  Ind5 <- index.samp[(nrow(index.samp)-4):nrow(index.samp), ]
   r <- r_expIslope(Ind5)
   
   Linfvec <- trlnorm(reps, Data@vbLinf[x], Data@CV_vbLinf[x])
@@ -162,7 +162,7 @@ r5sl_fGH_cat3 <- function(x, Data, reps) {
   
   Icurr.vec <- Ind5[5, ]
   Iref.vec <- trlnorm(reps, Data@Iref[x], Data@CV_Iref[x])
-  b <- b_cat3(Icurr.vec, Iref.vec)
+  b <- b_cat3(index.samp)
   
   Cc <- trlnorm(reps, Data@Cat[x, length(Data@Cat[x, ])], Data@CV_Cat[x])
   TAC <- Cc * r * f * b
@@ -176,9 +176,9 @@ environment(r5sl_fGH_cat3) <- asNamespace("DLMtool")
 
 r23_fGHe_cat3 <- function(x, Data, reps) {
   dependencies = "Data@Cat, Data@CV_Cat, Data@Ind, Data@CV_Ind, Data@CAL, Data@CAL_bins,
-  Data@LFS, Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort,
-  Data@Iref, Data@CV_Iref"
-  Ind5 <- sample_index(x, Data, reps, nyrs = 5)
+  Data@LFS, Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort"
+  index.samp <- sample_index(x, Data, reps)
+  Ind5 <- index.samp[(nrow(index.samp)-4):nrow(index.samp), ]
   r <- r_2over3(Ind5, uncertainty_cap = FALSE)
   
   Linfvec <- trlnorm(reps, Data@vbLinf[x], Data@CV_vbLinf[x])
@@ -195,7 +195,7 @@ r23_fGHe_cat3 <- function(x, Data, reps) {
   
   Icurr.vec <- Ind5[5, ]
   Iref.vec <- trlnorm(reps, Data@Iref[x], Data@CV_Iref[x])
-  b <- b_cat3(Icurr.vec, Iref.vec)
+  b <- b_cat3(index.samp)
   
   Cc <- trlnorm(reps, Data@Cat[x, length(Data@Cat[x, ])], Data@CV_Cat[x])
   TAC <- Cc * r * f * b
@@ -207,9 +207,9 @@ environment(r23_fGHe_cat3) <- asNamespace("DLMtool")
 
 r5sl_fGHe_cat3 <- function(x, Data, reps) {
   dependencies = "Data@Cat, Data@CV_Cat, Data@Ind, Data@CV_Ind, Data@CAL, Data@CAL_bins,
-  Data@LFS, Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort,
-  Data@Iref, Data@CV_Iref"
-  Ind5 <- sample_index(x, Data, reps, nyrs = 5)
+  Data@LFS, Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort"
+  index.samp <- sample_index(x, Data, reps)
+  Ind5 <- index.samp[(nrow(index.samp)-4):nrow(index.samp), ]
   r <- r_expIslope(Ind5)
   
   Linfvec <- trlnorm(reps, Data@vbLinf[x], Data@CV_vbLinf[x])
@@ -226,7 +226,7 @@ r5sl_fGHe_cat3 <- function(x, Data, reps) {
   
   Icurr.vec <- Ind5[5, ]
   Iref.vec <- trlnorm(reps, Data@Iref[x], Data@CV_Iref[x])
-  b <- b_cat3(Icurr.vec, Iref.vec)
+  b <- b_cat3(index.samp)
   
   Cc <- trlnorm(reps, Data@Cat[x, length(Data@Cat[x, ])], Data@CV_Cat[x])
   TAC <- Cc * r * f * b

@@ -1,8 +1,8 @@
 ############ Generic functions for neat MP functions
-sample_index <- function(x, Data, reps, nyrs = 5) {
-  Ind.ts <- Data@Ind[x, (length(Data@Ind[x, ])-nyrs+1):length(Data@Ind[x, ])]
-  Ind5 <- trlnorm(reps * nyrs, Ind.ts, Data@CV_Ind[x])
-  matrix(Ind5, ncol = reps)
+sample_index <- function(x, Data, reps) {
+  Ind.ts <- Data@Ind[x, ]
+  Ind <- trlnorm(reps * ncol(Ind.ts), Ind.ts, Data@CV_Ind[x])
+  matrix(Ind, ncol = reps)
 }
 
 
@@ -126,19 +126,16 @@ f_GHeffort <- function(CAL, CAL_bins, effort, Linf, K, M, t0, wla, wlb, LFS) {
 f_LBSPR <- function() {
 }
 
-# f = F0.1/(Z-M) from GH (w/effort?)
 
 
 
 ################ b-function 
-# Iref (reference index) is the index at BMSY, calculated in the operating model.
-# Thus, in ICES context, Ilim = 0.5 * Iref is the index at 0.5 BMSY.
-# b = min(1, Icurrent/Itrigger) for category 3 stocks
-# b = 1 for category 4, update once every 4 years
-b_cat3 <- function(Icurr, Iref, w = 1.4) {
-  Ilim <- 0.5 * Iref
+# Currently set Itrigger = minimum index in historical time series
+b_cat3 <- function(Imatrix, w = 1.4) {
+  Icurrent <- Imatrix[nrow(Imatrix), ]
+  Ilim <- apply(Imatrix, 2, min, na.rm = TRUE)
   Itrigger <- w * Ilim
-  Iratio <- Icurr/Itrigger
+  Iratio <- Icurrent/Itrigger
   b <- vapply(Iratio, function(x) min(x, 1), c(1))
   return(b)
 }
