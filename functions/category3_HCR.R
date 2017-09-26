@@ -5,7 +5,7 @@ r23_fLBI_cat3 <- function(x, Data, reps) {
   dependencies = "Data@Cat, Data@CV_Cat, Data@Ind, Data@CV_Ind, Data@CAL, Data@CAL_bins,
   Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort"
   index.samp <- sample_index(x, Data, reps)
-  Ind5 <- index.samp[(nrow(index.samp)-4):nrow(index.samp), ]
+  Ind5 <- matrix(index.samp[(nrow(index.samp)-4):nrow(index.samp), ], ncol = reps)
   r <- r_2over3(Ind5, uncertainty_cap = FALSE)
   
   Linfvec <- trlnorm(reps, Data@vbLinf[x], Data@CV_vbLinf[x])
@@ -17,8 +17,6 @@ r23_fLBI_cat3 <- function(x, Data, reps) {
   f <- f_LBI(CAL = Data@CAL[x, dim(Data@CAL)[2], ], CAL_bins = CAL_bins, 
              Linf = Linfvec, K = Kvec, M = Mvec)
   
-  Icurr.vec <- Ind5[5, ]
-  Iref.vec <- trlnorm(reps, Data@Iref[x], Data@CV_Iref[x])
   b <- b_cat3(index.samp)
   
   Cc <- trlnorm(reps, Data@Cat[x, length(Data@Cat[x, ])], Data@CV_Cat[x])
@@ -33,7 +31,7 @@ r5sl_fLBI_cat3 <- function(x, Data, reps) {
   dependencies = "Data@Cat, Data@CV_Cat, Data@Ind, Data@CV_Ind, Data@CAL, Data@CAL_bins,
   Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort"
   index.samp <- sample_index(x, Data, reps)
-  Ind5 <- index.samp[(nrow(index.samp)-4):nrow(index.samp), ]
+  Ind5 <- matrix(index.samp[(nrow(index.samp)-4):nrow(index.samp), ], ncol = reps)
   r <- r_expIslope(Ind5)
   
   Linfvec <- trlnorm(reps, Data@vbLinf[x], Data@CV_vbLinf[x])
@@ -45,8 +43,6 @@ r5sl_fLBI_cat3 <- function(x, Data, reps) {
   f <- f_LBI(CAL = Data@CAL[x, dim(Data@CAL)[2], ], CAL_bins = CAL_bins, 
              Linf = Linfvec, K = Kvec, M = Mvec)
   
-  Icurr.vec <- Ind5[5, ]
-  Iref.vec <- trlnorm(reps, Data@Iref[x], Data@CV_Iref[x])
   b <- b_cat3(index.samp)
   
   Cc <- trlnorm(reps, Data@Cat[x, length(Data@Cat[x, ])], Data@CV_Cat[x])
@@ -62,7 +58,7 @@ r23_fBHE_cat3 <- function(x, Data, reps) {
   dependencies = "Data@Cat, Data@CV_Cat, Data@Ind, Data@CV_Ind, Data@CAL, Data@CAL_bins,
   Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort"
   index.samp <- sample_index(x, Data, reps)
-  Ind5 <- index.samp[(nrow(index.samp)-4):nrow(index.samp), ]
+  Ind5 <- matrix(index.samp[(nrow(index.samp)-4):nrow(index.samp), ], ncol = reps)
   r <- r_2over3(Ind5, uncertainty_cap = FALSE)
   
   Linfvec <- trlnorm(reps, Data@vbLinf[x], Data@CV_vbLinf[x])
@@ -74,8 +70,6 @@ r23_fBHE_cat3 <- function(x, Data, reps) {
   f <- f_BHE(CAL = Data@CAL[x, dim(Data@CAL)[2], ], CAL_bins = CAL_bins, 
             Linf = Linfvec, K = Kvec, M = Mvec)
   
-  Icurr.vec <- Ind5[5, ]
-  Iref.vec <- trlnorm(reps, Data@Iref[x], Data@CV_Iref[x])
   b <- b_cat3(index.samp)
     
   Cc <- trlnorm(reps, Data@Cat[x, length(Data@Cat[x, ])], Data@CV_Cat[x])
@@ -91,7 +85,7 @@ r5sl_fBHE_cat3 <- function(x, Data, reps) {
   dependencies = "Data@Cat, Data@CV_Cat, Data@Ind, Data@CV_Ind, Data@CAL, Data@CAL_bins,
   Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort"
   index.samp <- sample_index(x, Data, reps)
-  Ind5 <- index.samp[(nrow(index.samp)-4):nrow(index.samp), ]
+  Ind5 <- matrix(index.samp[(nrow(index.samp)-4):nrow(index.samp), ], ncol = reps)
   r <- r_expIslope(Ind5)
   
   Linfvec <- trlnorm(reps, Data@vbLinf[x], Data@CV_vbLinf[x])
@@ -103,8 +97,6 @@ r5sl_fBHE_cat3 <- function(x, Data, reps) {
   f <- f_BHE(CAL = Data@CAL[x, dim(Data@CAL)[2], ], CAL_bins = CAL_bins, 
             Linf = Linfvec, K = Kvec, M = Mvec)
   
-  Icurr.vec <- Ind5[5, ]
-  Iref.vec <- trlnorm(reps, Data@Iref[x], Data@CV_Iref[x])
   b <- b_cat3(index.samp)
     
   Cc <- trlnorm(reps, Data@Cat[x, length(Data@Cat[x, ])], Data@CV_Cat[x])
@@ -121,7 +113,7 @@ r23_fGH_cat3 <- function(x, Data, reps) {
   dependencies = "Data@Cat, Data@CV_Cat, Data@Ind, Data@CV_Ind, Data@CAL, Data@CAL_bins,
   Data@LFS, Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort"
   index.samp <- sample_index(x, Data, reps)
-  Ind5 <- index.samp[(nrow(index.samp)-4):nrow(index.samp), ]
+  Ind5 <- matrix(index.samp[(nrow(index.samp)-4):nrow(index.samp), ], ncol = reps)
   r <- r_2over3(Ind5, uncertainty_cap = FALSE)
   
   Linfvec <- trlnorm(reps, Data@vbLinf[x], Data@CV_vbLinf[x])
@@ -133,8 +125,6 @@ r23_fGH_cat3 <- function(x, Data, reps) {
   f <- f_GH(CAL = Data@CAL[x, , ], CAL_bins = CAL_bins, LFS = Data@LFS[x], 
             Linf = Linfvec, K = Kvec, M = Mvec, wla = Data@wla[x], wlb = Data@wlb[x])
   
-  Icurr.vec <- Ind5[5, ]
-  Iref.vec <- trlnorm(reps, Data@Iref[x], Data@CV_Iref[x])
   b <- b_cat3(index.samp)
     
   Cc <- trlnorm(reps, Data@Cat[x, length(Data@Cat[x, ])], Data@CV_Cat[x])
@@ -148,7 +138,7 @@ r5sl_fGH_cat3 <- function(x, Data, reps) {
   dependencies = "Data@Cat, Data@CV_Cat, Data@Ind, Data@CV_Ind, Data@CAL, Data@CAL_bins,
   Data@LFS, Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort"
   index.samp <- sample_index(x, Data, reps)
-  Ind5 <- index.samp[(nrow(index.samp)-4):nrow(index.samp), ]
+  Ind5 <- matrix(index.samp[(nrow(index.samp)-4):nrow(index.samp), ], ncol = reps)
   r <- r_expIslope(Ind5)
   
   Linfvec <- trlnorm(reps, Data@vbLinf[x], Data@CV_vbLinf[x])
@@ -160,8 +150,6 @@ r5sl_fGH_cat3 <- function(x, Data, reps) {
   f <- f_GH(CAL = Data@CAL[x, , ], CAL_bins = CAL_bins, LFS = Data@LFS[x], 
             Linf = Linfvec, K = Kvec, M = Mvec, wla = Data@wla[x], wlb = Data@wlb[x])
   
-  Icurr.vec <- Ind5[5, ]
-  Iref.vec <- trlnorm(reps, Data@Iref[x], Data@CV_Iref[x])
   b <- b_cat3(index.samp)
   
   Cc <- trlnorm(reps, Data@Cat[x, length(Data@Cat[x, ])], Data@CV_Cat[x])
@@ -178,7 +166,7 @@ r23_fGHe_cat3 <- function(x, Data, reps) {
   dependencies = "Data@Cat, Data@CV_Cat, Data@Ind, Data@CV_Ind, Data@CAL, Data@CAL_bins,
   Data@LFS, Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort"
   index.samp <- sample_index(x, Data, reps)
-  Ind5 <- index.samp[(nrow(index.samp)-4):nrow(index.samp), ]
+  Ind5 <- matrix(index.samp[(nrow(index.samp)-4):nrow(index.samp), ], ncol = reps)
   r <- r_2over3(Ind5, uncertainty_cap = FALSE)
   
   Linfvec <- trlnorm(reps, Data@vbLinf[x], Data@CV_vbLinf[x])
@@ -193,8 +181,6 @@ r23_fGHe_cat3 <- function(x, Data, reps) {
                   Linf = Linfvec, K = Kvec, M = Mvec, t0 = t0vec, 
                   wla = Data@wla[x], wlb = Data@wlb[x])
   
-  Icurr.vec <- Ind5[5, ]
-  Iref.vec <- trlnorm(reps, Data@Iref[x], Data@CV_Iref[x])
   b <- b_cat3(index.samp)
   
   Cc <- trlnorm(reps, Data@Cat[x, length(Data@Cat[x, ])], Data@CV_Cat[x])
@@ -209,7 +195,7 @@ r5sl_fGHe_cat3 <- function(x, Data, reps) {
   dependencies = "Data@Cat, Data@CV_Cat, Data@Ind, Data@CV_Ind, Data@CAL, Data@CAL_bins,
   Data@LFS, Data@vbLinf, Data@CV_vbLinf, Data@vbK, Data@CV_vbK, Data@Mort, Data@CV_Mort"
   index.samp <- sample_index(x, Data, reps)
-  Ind5 <- index.samp[(nrow(index.samp)-4):nrow(index.samp), ]
+  Ind5 <- matrix(index.samp[(nrow(index.samp)-4):nrow(index.samp), ], ncol = reps)
   r <- r_expIslope(Ind5)
   
   Linfvec <- trlnorm(reps, Data@vbLinf[x], Data@CV_vbLinf[x])
@@ -224,8 +210,6 @@ r5sl_fGHe_cat3 <- function(x, Data, reps) {
                   Linf = Linfvec, K = Kvec, M = Mvec, t0 = t0vec, 
                   wla = Data@wla[x], wlb = Data@wlb[x])
   
-  Icurr.vec <- Ind5[5, ]
-  Iref.vec <- trlnorm(reps, Data@Iref[x], Data@CV_Iref[x])
   b <- b_cat3(index.samp)
   
   Cc <- trlnorm(reps, Data@Cat[x, length(Data@Cat[x, ])], Data@CV_Cat[x])
