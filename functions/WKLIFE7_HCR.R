@@ -44,7 +44,8 @@ get_Blim <- function(MSEobj, xR = 0.8) {
   nsim <- MSEobj@nsim
   proyears <- MSEobj@proyears
   
-  Blim <- calculate_Blim(steepness = MSEobj@OM$hs, B0 = MSEobj@OM$SSBMSY/MSEobj@OM$SSBMSY_SSB0, xR = xR)
+  B0 <- MSEobj@OM$SSBMSY/MSEobj@OM$SSBMSY_SSB0
+  Blim <- calculate_Blim(steepness = MSEobj@OM$hs, B0 = B0, xR = xR)
   PBlim <- matrix(NA, nm, nsim)
   
   for(m in 1:nm) {
@@ -54,7 +55,9 @@ get_Blim <- function(MSEobj, xR = 0.8) {
   
   MP.summary <- data.frame(MP = MSEobj@MPs, PBlim = round(apply(PBlim, 1, mean, na.rm = T), 2),
                            stdev = round(apply(PBlim, 1, sd, na.rm = T), 2))
-  OM.summary <- data.frame(Blim_BMSY = mean(Blim/MSEobj@OM$SSBMSY), stdev = sd(Blim/MSEobj@OM$SSBMSY))
+  OM.summary <- round(data.frame(Blim_BMSY = mean(Blim/MSEobj@OM$SSBMSY), stdev = sd(Blim/MSEobj@OM$SSBMSY),
+                           Blim_B0 = mean(Blim/B0), stdev = sd(Blim/B0),
+                           BMSY_B0 = mean(MSEobj@OM$SSBMSY_SSB0), stdev = sd(MSEobj@OM$SSBMSY_SSB0)), 2)
   
   return(list(MP.summary = MP.summary, OM.summary = OM.summary))
 }
