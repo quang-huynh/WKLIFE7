@@ -1,7 +1,7 @@
 ############ Generic functions for neat MP functions
 sample_index <- function(x, Data, reps) {
   Ind.ts <- Data@Ind[x, ]
-  Ind <- trlnorm(reps * ncol(Ind.ts), Ind.ts, Data@CV_Ind[x])
+  Ind <- trlnorm(reps * length(Ind.ts), Ind.ts, Data@CV_Ind[x])
   matrix(Ind, ncol = reps)
 }
 
@@ -140,4 +140,11 @@ b_cat3 <- function(Imatrix, w = 1.4) {
   return(b)
 }
 
-b_cat4 <- function() return(0.8)
+# Search Data object to see if 
+b_cat4 <- function(Data, buffer.interval = 4) {
+  current.year <- max(Data@Year)
+  LHYear <- Data@LHYear
+  projection.year <- current.year - LHYear
+  if(projection.year %% buffer.interval == 0) b <- 0.8 else b <- 1
+  return(b)
+}
