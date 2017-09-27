@@ -39,7 +39,7 @@
 #'                       interval = 1, reps = 100, timelimit = 150, CheckMPs = FALSE)
 #' }
 
-SPiCT_catchQuant <- structure(
+SPiCT_catchQuant05 <- structure(
     function(x, Data, reps = 1, quant = 0.5){
         dependencies <- "Data@Year, Data@Cat, Data@Ind"
         time <- Data@Year
@@ -48,11 +48,133 @@ SPiCT_catchQuant <- structure(
         inp <- list(timeC=time, obsC=Catch, 
                     timeI=time, obsI=Index,
                     ## timepredc = max(time) + 1,
-                    dteuler = 1 / 4,
+                    dteuler = 1 / 16,
                     do.sd.report=TRUE,
-                    getReportCovariance = TRUE)
+                    getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error")) {
+        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+            TAC <- rep(NA, 1)
+        } else {
+            predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
+            if(is(predcatch, "try-error")) {
+                TAC <- rep(NA, 1)
+            } else {
+                TAC <- exp(qnorm(quant, predcatch[2], predcatch[4]))
+            }
+        }
+
+        tacTemp <- DLMtool:::TACfilter(TAC)
+        c(tacTemp, rep(NA, reps-1))        
+        
+    },
+    class = "Output"
+)
+
+
+SPiCT_catchQuant03 <- structure(
+    function(x, Data, reps = 1, quant = 0.3){
+        dependencies <- "Data@Year, Data@Cat, Data@Ind"
+        time <- Data@Year
+        Catch <- Data@Cat[x,]
+        Index <- Data@Ind[x,]
+        inp <- list(timeC=time, obsC=Catch, 
+                    timeI=time, obsI=Index,
+                    ## timepredc = max(time) + 1,
+                    dteuler = 1 / 16,
+                    do.sd.report=TRUE,
+                    getReportCovariance = FALSE)
+        rep <- try(spict::fit.spict(inp))
+
+##        png(paste0("~/Documents/DrTokami/research/MSE/testing/repTest",Sys.time(),rnorm(1),".png"))
+##        plotRep <- plot(rep)
+##        dev.off()        
+##        save(rep, file=paste0("~/Documents/DrTokami/research/MSE/testing/repTest",Sys.time(),".RData"))
+        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+            TAC <- rep(NA, reps)
+        } else {
+            predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
+            if(is(predcatch, "try-error")) {
+                TAC <- rep(NA, reps)
+            } else {
+                TAC <- exp(qnorm(quant, predcatch[2], predcatch[4]))
+            }
+        }
+        DLMtool:::TACfilter(TAC)
+    },
+    class = "Output"
+)
+
+
+
+SPiCT_catchQuant035 <- structure(
+    function(x, Data, reps = 1, quant = 0.35){
+        dependencies <- "Data@Year, Data@Cat, Data@Ind"
+        time <- Data@Year
+        Catch <- Data@Cat[x,]
+        Index <- Data@Ind[x,]
+        inp <- list(timeC=time, obsC=Catch, 
+                    timeI=time, obsI=Index,
+                    ## timepredc = max(time) + 1,
+                    dteuler = 1 / 16,
+                    do.sd.report=TRUE,
+                    getReportCovariance = FALSE)
+        rep <- try(spict::fit.spict(inp))
+        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+            TAC <- rep(NA, reps)
+        } else {
+            predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
+            if(is(predcatch, "try-error")) {
+                TAC <- rep(NA, reps)
+            } else {
+                TAC <- exp(qnorm(quant, predcatch[2], predcatch[4]))
+            }
+        }
+        DLMtool:::TACfilter(TAC)
+    },
+    class = "Output"
+)
+
+SPiCT_catchQuant04 <- structure(
+    function(x, Data, reps = 1, quant = 0.4){
+        dependencies <- "Data@Year, Data@Cat, Data@Ind"
+        time <- Data@Year
+        Catch <- Data@Cat[x,]
+        Index <- Data@Ind[x,]
+        inp <- list(timeC=time, obsC=Catch, 
+                    timeI=time, obsI=Index,
+                    ## timepredc = max(time) + 1,
+                    dteuler = 1 / 16,
+                    do.sd.report=TRUE,
+                    getReportCovariance = FALSE)
+        rep <- try(spict::fit.spict(inp))
+        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+            TAC <- rep(NA, reps)
+        } else {
+            predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
+            if(is(predcatch, "try-error")) {
+                TAC <- rep(NA, reps)
+            } else {
+                TAC <- exp(qnorm(quant, predcatch[2], predcatch[4]))
+            }
+        }
+        DLMtool:::TACfilter(TAC)
+    },
+    class = "Output"
+)
+SPiCT_catchQuant045 <- structure(
+    function(x, Data, reps = 1, quant = 0.45){
+        dependencies <- "Data@Year, Data@Cat, Data@Ind"
+        time <- Data@Year
+        Catch <- Data@Cat[x,]
+        Index <- Data@Ind[x,]
+        inp <- list(timeC=time, obsC=Catch, 
+                    timeI=time, obsI=Index,
+                    ## timepredc = max(time) + 1,
+                    dteuler = 1 / 16,
+                    do.sd.report=TRUE,
+                    getReportCovariance = FALSE)
+        rep <- try(spict::fit.spict(inp))
+        if(is(rep, "try-error") | rep$opt$convergence != 0) {
             TAC <- rep(NA, reps)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
