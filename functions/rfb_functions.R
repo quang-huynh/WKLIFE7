@@ -124,6 +124,7 @@ f_GHeffort <- function(CAL, CAL_bins, effort, Linf, K, M, t0, wla, wlb, LFS) {
 
 # f = spr/spr_target 
 f_LBSPR <- function() {
+  invisible()
 }
 
 
@@ -140,7 +141,7 @@ b_cat3 <- function(Imatrix, w = 1.4) {
   return(b)
 }
 
-# Search Data object to see if 
+
 b_cat4 <- function(Data, buffer.interval = 4) {
   current.year <- max(Data@Year)
   LHYear <- Data@LHYear
