@@ -34,11 +34,6 @@ r_2over3 <- function(Ind5, uncertainty_cap = FALSE, lower = 0.8, upper = 1.2) {
   return(r)
 }
 
-# r = 1 for category 4 stocks
-r_category4 <- function() return(1)
-
-
-
 
 
 ############# f 
@@ -72,11 +67,13 @@ f_BHE <- function(CAL, CAL_bins, Linf, K, M) {
 # f = F0.1/(Z-M) from GH (w/effort?)
 f_GH <- function(CAL, CAL_bins, LFS, Linf, K, M, wla, wlb) {
   Lmean <- numeric(length = dim(CAL)[2])
+  ss <- numeric(length = dim(CAL)[2])
   Lc.ind <- which(LFS <= CAL_bins)[1]
   # Loop across years
   for(i in 1:length(Lmean)) {
     Lmean[i] <- sum(CAL[i, Lc.ind:length(CAL_bins)] * CAL_bins[Lc.ind:length(CAL_bins)])/
       sum(CAL[i, Lc.ind:length(CAL_bins)])
+    ss[i] <- sum(CAL[i, Lc.ind:length(CAL_bins)])
   }
   # Stochastic reference points
   F01 <- numeric(length = length(Linf))
@@ -84,7 +81,7 @@ f_GH <- function(CAL, CAL_bins, LFS, Linf, K, M, wla, wlb) {
   for(i in 1:length(Linf)) {
     F01[i] <- get_F01(Linf = Linf[i], K = K[i], Lc = LFS, 
                       M = M[i], wla = wla, wlb = wlb)
-    Zcurr[i] <- model_select_GH(mlen = Lmean, K = K[i], Linf = Linf[i], Lc = LFS)
+    Zcurr[i] <- model_select_GH(mlen = Lmean, ss = ss, K = K[i], Linf = Linf[i], Lc = LFS)
   }
     
   res <- F01/(Zcurr - M)
@@ -92,31 +89,35 @@ f_GH <- function(CAL, CAL_bins, LFS, Linf, K, M, wla, wlb) {
   return(res)
 }
 
-# f = F0.1/(Z-M) from GH (w/effort?)
+# f = F0.1/F from GH
 f_GHeffort <- function(CAL, CAL_bins, effort, Linf, K, M, t0, wla, wlb, LFS) {
   Lmean <- numeric(length = dim(CAL)[2])
+  ss <- numeric(length = dim(CAL)[2])
   Lc.ind <- which(LFS <= CAL_bins)[1]
   # Loop across years
   for(i in 1:length(Lmean)) {
     Lmean[i] <- sum(CAL[i, Lc.ind:length(CAL_bins)] * CAL_bins[Lc.ind:length(CAL_bins)])/
       sum(CAL[i, Lc.ind:length(CAL_bins)])
+    ss[i] <- sum(CAL[i, Lc.ind:length(CAL_bins)])
   }
   # Stochastic reference points
   F01 <- numeric(length = length(Linf))
-  Zcurr <- numeric(length = length(Linf))
+  Fcurr <- numeric(length = length(Linf))
   for(i in 1:length(Linf)) {
-    F01[i] <- get_F01(Linf = Linf[i], K = K[i], Lc = LFS, 
-                      M = M[i], wla = wla, wlb = wlb)
-    opt <- try(optim(c(1e-2, M[i]), GHeffort, method = "BFGS", 
+    opt <- try(optim(c(1e-2, M[i]), GHeffort, 
                      Lbar = Lmean, ss = rep(1, length(Lmean)), 
                      eff = effort, Linf = Linf[i], K = K[i], a0 = t0[i], 
                      Lc = LFS, eff_init = effort[1], n_age = MaxAge,
+                     method = "L-BFGS-B", lower = c(0, 0),
                      control = list(maxit = 1e+06), hessian = FALSE), silent = TRUE)
-    if(inherits(opt, "try-error")) Zcurr[i] <- NA
-    else Zcurr[i] <- opt$par[1] * effort[length(effort)] + opt$par[2]
+    if(inherits(opt, "try-error")) {
+      Fcurr[i] <- F01[i] <- NA
+    } else {
+      Fcurr[i] <- opt$par[1] * effort[length(effort)]
+      F01[i] <- get_F01(Linf = Linf[i], K = K[i], Lc = LFS, M = opt$par[2], wla = wla, wlb = wlb)
+    }
   }
-  
-  res <- F01/(Zcurr - M)
+  res <- F01/Fcurr
   res[is.infinite(res) | res < 0 | is.na(res)] <- 1
   return(res)
 }
