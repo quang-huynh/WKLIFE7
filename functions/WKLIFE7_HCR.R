@@ -9,7 +9,6 @@
 #
 # x = r23   2-over-3 rule
 #   = r5sl  exp(slope of the most recent 5 years' log-index)
-#   = r4    1 for category 3 stocks
 #
 # y = fLBI  Lmean/LF=M
 #     fBHE  M/(Z-M) from Beverton-Holt equation
@@ -17,7 +16,7 @@
 #     fGHe  F0.1/(Z-M) from Gedamke-Hoenig with effort
 #
 # z = cat3  b = min(1, Icurr/Itrig) for category 3 stocks
-#   = cat4  b = 0.8 for category 4 stocks
+#   = cat4  b = 0.8 for category 4 stocks for every fourth year
 
 
 library(DLMtool)
@@ -29,6 +28,9 @@ sourceCpp('functions/ML_functions.cpp')
 source('functions/category3_HCR.R')
 source('functions/category4_HCR.R')
 
+source('functions/Pplot2_Blim.R')
+source('functions/Tplot_Blim.R')
+
 ########### Calculate Blim from MSE
 # Blim is the max(0.2 * B0, B such that R/R0 = 0.8)
 # Biomass refers to spawning stock biomass
@@ -39,28 +41,40 @@ calculate_Blim <- function(steepness, B0, xR = 0.8) {
   return(Blim)
 }
 
-get_Blim <- function(MSEobj, xR = 0.8) {
+
+get_Blim <- function(MSEobj, xR = 0.8, output = c('summary', 'raw')) {
+  output <- match.arg(output)
   nm <- MSEobj@nMPs
   nsim <- MSEobj@nsim
   proyears <- MSEobj@proyears
   
   B0 <- MSEobj@OM$SSBMSY/MSEobj@OM$SSBMSY_SSB0
   Blim <- calculate_Blim(steepness = MSEobj@OM$hs, B0 = B0, xR = xR)
-  PBlim <- matrix(NA, nm, nsim)
   
-  for(m in 1:nm) {
-    for(j in 1:nsim) PBlim[m, j] <- sum(MSEobj@SSB[j, m, ] < Blim[j])/proyears * 100
+  if(output == 'summary') {
+    PBlim <- matrix(NA, nm, nsim)
+    for(m in 1:nm) {
+      for(j in 1:nsim) PBlim[m, j] <- sum(MSEobj@SSB[j, m, ] < Blim[j])/proyears * 100
+    }
+    Blim_BMSY <- mean(Blim/MSEobj@OM$SSBMSY)
+    
+    MP.summary <- data.frame(MP = MSEobj@MPs, PBlim = round(apply(PBlim, 1, mean, na.rm = T), 2),
+                             stdev = round(apply(PBlim, 1, sd, na.rm = T), 2))
+    OM.summary <- round(data.frame(Blim_BMSY = mean(Blim/MSEobj@OM$SSBMSY), stdev = sd(Blim/MSEobj@OM$SSBMSY),
+                                   Blim_B0 = mean(Blim/B0), stdev = sd(Blim/B0),
+                                   BMSY_B0 = mean(MSEobj@OM$SSBMSY_SSB0), stdev = sd(MSEobj@OM$SSBMSY_SSB0)), 2)
+    
+    return(list(MP.summary = MP.summary, OM.summary = OM.summary))
   }
-  Blim_BMSY <- mean(Blim/MSEobj@OM$SSBMSY)
-  
-  MP.summary <- data.frame(MP = MSEobj@MPs, PBlim = round(apply(PBlim, 1, mean, na.rm = T), 2),
-                           stdev = round(apply(PBlim, 1, sd, na.rm = T), 2))
-  OM.summary <- round(data.frame(Blim_BMSY = mean(Blim/MSEobj@OM$SSBMSY), stdev = sd(Blim/MSEobj@OM$SSBMSY),
-                           Blim_B0 = mean(Blim/B0), stdev = sd(Blim/B0),
-                           BMSY_B0 = mean(MSEobj@OM$SSBMSY_SSB0), stdev = sd(MSEobj@OM$SSBMSY_SSB0)), 2)
-  
-  return(list(MP.summary = MP.summary, OM.summary = OM.summary))
+  if(output == 'raw') {
+    B_Blim <- array(NA, dim = c(nsim, nm, proyears))
+    for(m in 1:nm) {
+      for(j in 1:nsim) B_Blim[j, m, ] <- MSEobj@SSB[j, m, ]/Blim[j]
+    }
+    return(B_Blim)
+  }
 }
+
 
 ########### Preliminary MPs
 ## Update advice every 2 or 3 years
