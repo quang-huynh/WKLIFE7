@@ -80,8 +80,9 @@ get_Blim <- function(MSEobj, xR = 0.8, output = c('summary', 'raw')) {
 ## Update advice every 2 or 3 years
 Two_Over_Three_Capped <- function(x, Data, reps) {
   dependencies = "Data@Cat, Data@CV_Cat, Data@Ind, Data@CV_Ind"
-  Ind5 <- sample_index(x, Data, reps, nyrs = 5)
-  r <- r_2over3(Ind5, uncertainty_cap = TRUE)
+  index.samp <- sample_index(x, Data, reps)
+  Ind5 <- matrix(index.samp[(nrow(index.samp)-4):nrow(index.samp), ], ncol = reps)
+  r <- r_2over3(Ind5, uncertainty_cap = FALSE)
   f <- 1
   b <- 1
   Cc <- trlnorm(reps, Data@Cat[x, length(Data@Cat[x, ])], Data@CV_Cat[x])
@@ -93,7 +94,8 @@ environment(Two_Over_Three_Capped) <- asNamespace("DLMtool")
 
 Islope5y <- function(x, Data, reps) {
   dependencies = "Data@Cat, Data@CV_Cat, Data@Ind, Data@CV_Ind"
-  Ind5 <- sample_index(x, Data, reps, nyrs = 5)
+  index.samp <- sample_index(x, Data, reps)
+  Ind5 <- matrix(index.samp[(nrow(index.samp)-4):nrow(index.samp), ], ncol = reps)
   r <- r_expIslope(Ind5)
   f <- 1
   b <- 1
