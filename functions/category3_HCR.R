@@ -179,7 +179,7 @@ r23_fGHe_cat3 <- function(x, Data, reps) {
   f <- f_GHeffort(CAL = Data@CAL[x, , ], CAL_bins = CAL_bins, LFS = Data@LFS[x], 
                   effort = Data@Cat[x, ]/Data@Ind[x, ],
                   Linf = Linfvec, K = Kvec, M = Mvec, t0 = t0vec, 
-                  wla = Data@wla[x], wlb = Data@wlb[x])
+                  wla = Data@wla[x], wlb = Data@wlb[x], MaxAge = Data@MaxAge)
   
   b <- b_cat3(index.samp)
   
@@ -208,7 +208,7 @@ r5sl_fGHe_cat3 <- function(x, Data, reps) {
   f <- f_GHeffort(CAL = Data@CAL[x, , ], CAL_bins = CAL_bins, LFS = Data@LFS[x], 
                   effort = Data@Cat[x, ]/Data@Ind[x, ],
                   Linf = Linfvec, K = Kvec, M = Mvec, t0 = t0vec, 
-                  wla = Data@wla[x], wlb = Data@wlb[x])
+                  wla = Data@wla[x], wlb = Data@wlb[x], MaxAge = Data@MaxAge)
   
   b <- b_cat3(index.samp)
   
