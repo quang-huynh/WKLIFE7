@@ -3,7 +3,7 @@
 require(RColorBrewer)
 
 ### not happy with some default settings in the DLMtool plots + additional graphs
-
+### Tobias Mildenberger
 
 
 tradeoffplotTKM <- function (x, y, xlab, ylab, labs, cex, vl, hl) 
@@ -124,6 +124,9 @@ Tplot2TKM <- function (MSEobj, nam = NA, main=NA)
 
 
 
+
+
+
 HplotTKM <- function(MSEobj, main=NA,
                      quants = c(0.1,0.9),
                      parOR = FALSE){
@@ -239,7 +242,7 @@ TplotsingleTKM <- function (MSEobj, nam = NA, main = NA)
     POF <- rep(NA, MSEobj@nMPs)
     yind <- max(MSEobj@proyears - 4, 1):MSEobj@proyears
     RefYd <- MSEobj@OM$RefY
-    for (mm in 1:5){     ##1:MSEobj@nMPs) {
+    for (mm in 1:MSEobj@nMPs) {
         
         Yd[mm] <- round(mean(apply(MSEobj@C[, mm, yind], 1, mean, 
             na.rm = T)/RefYd, na.rm = T) * 100, 1)
@@ -252,7 +255,7 @@ TplotsingleTKM <- function (MSEobj, nam = NA, main = NA)
         P100[mm] <- round(sum(MSEobj@B_BMSY[, mm, ] <= 1, na.rm = T)/prod(dim(MSEobj@B_BMSY[, 
             mm, ])) * 100, 1)
     }
-    coly <- rep(brewer.pal(8,"Dark2"), 20)##[1:length(MSEobj@MPs[1:MSEobj@nMPs])]    
+    coly <- rep(brewer.pal(8,"Dark2"), 20)[1:length(MSEobj@MPs[1:MSEobj@nMPs])]    
     coly[MSEobj@MPs[1:MSEobj@nMPs] %in% c("AvC", "curE", "FMSYref")] <- "black"    
 ##    old_par <- par(mfrow = c(2, 2), mai = c(0.9, 1, 0.1, 0.1), 
 ##        omi = c(0.1, 0.1, 0.4, 0))
