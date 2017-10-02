@@ -52,7 +52,7 @@ spict_catchPercentile05 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -63,8 +63,9 @@ spict_catchPercentile05 <- structure(
             }
         }
 
+        rm(rep); gc()
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
@@ -84,7 +85,7 @@ spict_catchPercentile10 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -95,8 +96,9 @@ spict_catchPercentile10 <- structure(
             }
         }
 
+        rm(rep); gc()
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
@@ -115,7 +117,7 @@ spict_catchPercentile15 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -126,8 +128,9 @@ spict_catchPercentile15 <- structure(
             }
         }
 
+        rm(rep); gc()
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
@@ -146,7 +149,7 @@ spict_catchPercentile20 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -157,8 +160,9 @@ spict_catchPercentile20 <- structure(
             }
         }
 
+        rm(rep); gc()
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
@@ -177,7 +181,7 @@ spict_catchPercentile25 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -188,8 +192,9 @@ spict_catchPercentile25 <- structure(
             }
         }
 
+        rm(rep); gc()        
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
@@ -208,7 +213,7 @@ spict_catchPercentile30 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -219,8 +224,9 @@ spict_catchPercentile30 <- structure(
             }
         }
 
+        rm(rep); gc();        
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
@@ -239,7 +245,7 @@ spict_catchPercentile35 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -250,8 +256,9 @@ spict_catchPercentile35 <- structure(
             }
         }
 
+        rm(rep); gc()
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
@@ -270,7 +277,7 @@ spict_catchPercentile40 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -281,8 +288,9 @@ spict_catchPercentile40 <- structure(
             }
         }
 
+        rm(rep); gc()
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
@@ -301,7 +309,7 @@ spict_catchPercentile45 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -312,8 +320,9 @@ spict_catchPercentile45 <- structure(
             }
         }
 
+        rm(rep); gc()
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
@@ -332,7 +341,7 @@ spict_catchPercentile50 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -343,8 +352,9 @@ spict_catchPercentile50 <- structure(
             }
         }
 
+        rm(rep); gc()
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
@@ -363,7 +373,7 @@ spict_catchPercentile55 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -374,8 +384,9 @@ spict_catchPercentile55 <- structure(
             }
         }
 
+        rm(rep); gc()
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
@@ -394,7 +405,7 @@ spict_catchPercentile60 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -405,8 +416,9 @@ spict_catchPercentile60 <- structure(
             }
         }
 
+        rm(rep); gc()
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
@@ -425,7 +437,7 @@ spict_catchPercentile65 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -436,8 +448,9 @@ spict_catchPercentile65 <- structure(
             }
         }
 
+        rm(rep); gc()
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
@@ -456,7 +469,7 @@ spict_catchPercentile70 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -467,8 +480,9 @@ spict_catchPercentile70 <- structure(
             }
         }
 
+        rm(rep); gc()
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
@@ -487,7 +501,7 @@ spict_catchPercentile75 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -498,8 +512,9 @@ spict_catchPercentile75 <- structure(
             }
         }
 
+        rm(rep); gc()
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
@@ -518,7 +533,7 @@ spict_catchPercentile80 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -529,8 +544,9 @@ spict_catchPercentile80 <- structure(
             }
         }
 
+        rm(rep); gc()
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
@@ -549,7 +565,7 @@ spict_catchPercentile85 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -560,8 +576,9 @@ spict_catchPercentile85 <- structure(
             }
         }
 
+        rm(rep); gc()
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
@@ -580,7 +597,7 @@ spict_catchPercentile90 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -591,8 +608,9 @@ spict_catchPercentile90 <- structure(
             }
         }
 
+        rm(rep); gc()
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
@@ -611,7 +629,7 @@ spict_catchPercentile95 <- structure(
                     do.sd.report=TRUE,
                     getReportCovariance = FALSE)
         rep <- try(spict::fit.spict(inp))
-        if(is(rep, "try-error") | rep$opt$convergence != 0) {
+        if(is(rep, "try-error") || rep$opt$convergence != 0) {
             TAC <- rep(NA, 1)
         } else {
             predcatch <- try(spict::pred.catch(rep, get.sd = TRUE, exp = FALSE, fmsyfac = 1))
@@ -622,8 +640,9 @@ spict_catchPercentile95 <- structure(
             }
         }
 
+        rm(rep); gc()
         tacTemp <- DLMtool:::TACfilter(TAC)
-        c(tacTemp, rep(NA, reps-1))        
+        c(tacTemp, rep(NA, reps-1))
         
     },
     class = "Output"
