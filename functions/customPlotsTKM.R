@@ -136,13 +136,13 @@ HplotTKM <- function(MSEobj, main=NA,
     nc <- MSEobj@nMPs
 
     ## SSB
-    ssbhist <- apply(resMSE@SSB_hist, c(1,3), sum, na.rm=TRUE) ##sum over ages and area
+    ssbhist <- apply(MSEobj@SSB_hist, c(1,3), sum, na.rm=TRUE) ##sum over ages and area
     statsHist <- apply(ssbhist, 2,
                            quantile, c(quants[1], 0.5, quants[2]), na.rm = TRUE)
     statsSSBmsy <- quantile(MSEobj@OM$SSBMSY, probs= c(quants[1], 0.5, quants[2]), na.rm = TRUE)
 
     ## Fishing mortality
-    statsHistF <- apply(resMSE@FM_hist, 3,
+    statsHistF <- apply(MSEobj@FM_hist, 3,
                            quantile, c(quants[1], 0.5, quants[2]), na.rm = TRUE)
     statsFFmsy <- quantile(MSEobj@OM$FMSY, probs= c(quants[1], 0.5, quants[2]), na.rm = TRUE)
     
