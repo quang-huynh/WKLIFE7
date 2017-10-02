@@ -146,8 +146,11 @@ HplotTKM <- function(MSEobj, main=NA,
                            quantile, c(quants[1], 0.5, quants[2]), na.rm = TRUE)
     statsFFmsy <- quantile(MSEobj@OM$FMSY, probs= c(quants[1], 0.5, quants[2]), na.rm = TRUE)
     
-    ylim <- range(MSEobj@SSB, MSEobj@SSB_hist)
-    ylimF <- range(MSEobj@FM, MSEobj@FM_hist)    
+    ylim <- range(MSEobj@SSB, ssbhist)
+    ylimF <- range(MSEobj@FM, MSEobj@FM_hist)
+
+
+
 
     nr <- 2  ## 2 if adding F
     if (!parOR) {
