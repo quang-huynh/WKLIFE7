@@ -81,7 +81,7 @@ TplotTKM <- function (MSEobj, nam = NA, main = NA)
         mtext(nam, 3, outer = T, line = 0.3, font = 2)
     par(old_par)
 }
-
+environment(TplotTKM) <- asNamespace("DLMtool")
 
 
 Tplot2TKM <- function (MSEobj, nam = NA, main=NA) 
@@ -277,3 +277,4 @@ TplotsingleTKM <- function (MSEobj, nam = NA, main = NA)
 ##        mtext(nam, 3, outer = T, line = 0.3, font = 2)
 ##    par(old_par)
 }
+environment(TplotsingleTKM) <- asNamespace('DLMtool')
