@@ -1,7 +1,7 @@
 Pplot2_Blim <- function (MSEobj, YVar = c("SSB_SSBlim", "F_FMSY"), MPs = NA, 
           sims = NULL, traj = c("all", "quant"), quants = c(0.1, 0.9), 
-          incquant = TRUE, quantcol = "lightgray", RefYield = c("lto", 
-                                                                "curr"), LastYr = TRUE, maxMP = 6, alpha = 60, cex.axis = 1.35, 
+          incquant = TRUE, quantcol = "lightgray", RefYield = c("lto", "curr"), 
+          HistoricalYr = FALSE, LastYr = TRUE, maxMP = 6, alpha = 60, cex.axis = 1.35, 
           cex.lab = 1.4, YLab = NULL, incMP = TRUE, MPcex = 1.4, incLeg = TRUE, 
           cex.leg = 1.5, legPos = "topleft", yline = NULL, parOR = FALSE, 
           xaxis = TRUE, yaxis = TRUE, oneIt = TRUE, ...) 
@@ -29,6 +29,7 @@ Pplot2_Blim <- function (MSEobj, YVar = c("SSB_SSBlim", "F_FMSY"), MPs = NA,
   }
   MPs <- MSEobj@MPs
   proyears <- MSEobj@proyears
+  nyears <- MSEobj@nyears
   RefYd <- MSEobj@OM$RefY
   RefYield <- match.arg(RefYield)
   traj <- match.arg(traj)
@@ -45,7 +46,6 @@ Pplot2_Blim <- function (MSEobj, YVar = c("SSB_SSBlim", "F_FMSY"), MPs = NA,
   SSB_SSBlim <- get_Blim(MSEobj, xR = 0.7, output = 'raw') # Summary Blim
   Dat <- list(SSB_SSB0 = Deplet, SSB_SSBMSY = MSEobj@B_BMSY, 
               F_FMSY = MSEobj@F_FMSY, Yield = Yield, SSB_SSBlim = SSB_SSBlim)
-
   Dat <- Dat[YVar]
   if ("Yield" %in% YVar & RefYield == "curr") {
     ny <- dim(Dat$Yield)[3]
@@ -55,6 +55,29 @@ Pplot2_Blim <- function (MSEobj, YVar = c("SSB_SSBlim", "F_FMSY"), MPs = NA,
   if ("Yield" %in% YVar & !LastYr) {
     Dat$Yield <- Dat$Yield[, , 2:proyears, drop = FALSE]
   }
+  
+  SSB_hist.areasum <- rowSums(MSEobj@SSB_hist, dims = 3) # sum over areas
+  SSB_hist.agesum <- matrix(0, nrow = nsim, ncol = nyears) # next sum over ages
+  for(i in 1:dim(MSEobj@SSB_hist)[2]) SSB_hist.agesum <- SSB_hist.agesum + SSB_hist.areasum[, i, ]
+  
+  FM_hist.areasum <- rowSums(MSEobj@FM_hist, dims = 3) # sum over areas
+  FM_hist.agesum <- matrix(0, nrow = nsim, ncol = nyears) # next sum over ages
+  for(i in 1:dim(MSEobj@FM_hist)[2]) FM_hist.agesum <- FM_hist.agesum + FM_hist.areasum[, i, ]
+  
+  CB_hist.areasum <- rowSums(MSEobj@CB_hist, dims = 3) # sum over areas
+  CB_hist.agesum <- matrix(0, nrow = nsim, ncol = nyears) # next sum over ages
+  for(i in 1:dim(MSEobj@CB_hist)[2]) CB_hist.agesum <- CB_hist.agesum + CB_hist.areasum[, i, ]
+  if(RefYield == "lto") Yield.hist <- CB_hist.agesum/MSEobj@OM$RefY
+  if(RefYield == "curr") Yield.hist <- CB_hist.agesum/CB_hist.agesum[, nyears]
+  
+  Blim.absolute <- get_Blim(MSEobj, xR = 0.7, output = 'raw', magnitude = 'absolute')
+  DatHist <- list(SSB_SSB0 = SSB_hist.agesum/MSEobj@OM$SSB0,
+                  SSB_SSBMSY = SSB_hist.agesum/MSEobj@OM$SSBMSY,
+                  F_FMSY = FM_hist.agesum/MSEobj@OM$FMSY_M,
+                  Yield = Yield.hist,
+                  SSB_SSBlim = SSB_hist.agesum/Blim.absolute)
+  DatHist <- DatHist[YVar]
+  
   nr <- length(Dat)
   nc <- nMPs
   dots <- list(...)
@@ -96,39 +119,57 @@ Pplot2_Blim <- function (MSEobj, YVar = c("SSB_SSBlim", "F_FMSY"), MPs = NA,
   for (X in 1:length(Dat)) {
     Col2 <- Col
     dat <- Dat[[X]]
+    datHist <- DatHist[[X]]
     ylim <- ylims[X, ]
     ylab <- YLabs[[X]]
     if (grepl("F_FMSY", YVar[X])) 
       Col2 <- rev(Col)
     for (mm in 1:nMPs) {
-      plot(1:length(dat[1, mm, ]), dat[1, mm, ], ylim = ylim, 
+      if(!HistoricalYr) x.lower <- 1
+      if(HistoricalYr) x.lower <- -nyears
+      x.upper <- length(dat[1, mm, ])
+      plot(1:length(dat[1, mm, ]), dat[1, mm, ], ylim = ylim, xlim = c(x.lower, x.upper),
            type = "n", axes = FALSE, xlab = "", ylab = "")
-      if (traj == "all") 
-        for (i in 1:MSEobj@nsim) lines(dat[i, mm, ], 
-                                       col = Col2[min(100, ceiling(dat[i, mm, length(dat[i, 
-                                                                                         mm, ])] * 100))], lwd = lwd)
+      if(HistoricalYr) abline(v = 0, lwd = 1, lty = 3)
+      if (traj == "all")  
+        for (i in 1:MSEobj@nsim) {
+          lines(dat[i, mm, ], col = Col2[min(100, ceiling(dat[i, mm, length(dat[i, mm, ])] * 100))], lwd = lwd)
+          if(HistoricalYr) lines(x.lower:-1, datHist[i, ], 
+                                 col = Col2[min(100, ceiling(dat[i, mm, length(dat[i, mm, ])] * 100))], lwd = lwd)
+        }
       if (traj == "quant") {
         stats <- apply(dat[, mm, , drop = FALSE], 3, 
                        quantile, c(quants[1], 0.5, quants[2]), na.rm = TRUE)
-        if (length(quants) == 4) 
+        statsHist <- apply(datHist, 2, quantile, c(quants[1], 0.5, quants[2]), na.rm = TRUE)
+        if (length(quants) == 4) {
           stats2 <- apply(dat[, mm, , drop = FALSE], 
                           3, quantile, c(quants[3], quants[4]), na.rm = TRUE)
+          stats2Hist <- apply(datHist, 3, quantile, c(quants[3], quants[4]), na.rm = TRUE)
+        }
         if (length(quants) != 4) 
-          stats2 <- NULL
-        if (!incquant) 
+          stats2 <- stats2Hist <- NULL
+        if (!incquant) {
           lines(1:length(stats[2, ]), stats[2, ], lwd = 3)
+          if(HistoricalYr) lines(x.lower:-1, statsHist[2, ], lwd = 3)
+        }
         if (incquant) {
           if (!is.null(stats2)) {
-            if (length(quantcol) < 2) 
+            if (length(quantcol) < 2) {
               quantcol <- c(quantcol, "darkgray")
-            polygon(x = c(1:length(stats2[2, ]), length(stats2[2, 
-                                                               ]):1), y = c(stats2[1, ], rev(stats2[2, 
-                                                                                                    ])), col = quantcol[2], border = FALSE)
+              polygon(x = c(1:length(stats2[2, ]), length(stats2[2, ]):1), 
+                      y = c(stats2[1, ], rev(stats2[2, ])), col = quantcol[2], border = FALSE)
+            }
           }
-          polygon(x = c(1:length(stats[2, ]), length(stats[2, 
-                                                           ]):1), y = c(stats[1, ], rev(stats[3, ])), 
-                  col = quantcol[1], border = FALSE)
+          polygon(x = c(1:length(stats[2, ]), length(stats[2, ]):1), y = c(stats[1, ], rev(stats[3, ])), 
+                  col = quantcol[1], border = FALSE)          
           lines(1:length(stats[2, ]), stats[2, ], lwd = 3)
+          if(HistoricalYr) {
+            polygon(x = c(-nyears:-1, -1:-nyears), y = c(statsHist[1, ], rev(statsHist[3, ])),
+                    col = quantcol[1], border = FALSE)
+            lines(-nyears:-1, statsHist[2, ], lwd = 3)
+            if(oneIt) 
+              lines(-nyears:-1, datHist[2, ], lwd = 1)
+          }
           if (oneIt) 
             lines(dat[2, mm, , drop = FALSE], lwd = 1)
         }
