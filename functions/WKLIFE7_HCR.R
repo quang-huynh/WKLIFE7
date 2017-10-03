@@ -18,9 +18,9 @@
 # z = cat3  b = min(1, Icurr/Itrig) for category 3 stocks
 #   = cat4  b = 0.8 for category 4 stocks for every fourth year
 
-
 library(DLMtool)
 library(Rcpp)
+library(RColorBrewer)
 
 source('functions/rfb_functions.R')
 source('functions/meanlength_fun.R')
@@ -30,6 +30,7 @@ source('functions/category4_HCR.R')
 
 source('functions/Pplot2_Blim.R')
 source('functions/Tplot_Blim.R')
+source('functions/customPlotsTKM.R')
 
 ########### Calculate Blim from MSE
 # Blim is the max(0.2 * B0, B such that R/R0 = 0.8)
@@ -42,15 +43,16 @@ calculate_Blim <- function(steepness, B0, xR = 0.8) {
 }
 
 
-get_Blim <- function(MSEobj, xR = 0.8, output = c('summary', 'raw')) {
+get_Blim <- function(MSEobj, xR = 0.7, output = c('summary', 'raw'), 
+                     magnitude = c('relative', 'absolute'))  {
   output <- match.arg(output)
+  magnitude <- match.arg(magnitude)
   nm <- MSEobj@nMPs
   nsim <- MSEobj@nsim
   proyears <- MSEobj@proyears
   
   B0 <- MSEobj@OM$SSBMSY/MSEobj@OM$SSBMSY_SSB0
   Blim <- calculate_Blim(steepness = MSEobj@OM$hs, B0 = B0, xR = xR)
-  
   if(output == 'summary') {
     PBlim <- matrix(NA, nm, nsim)
     for(m in 1:nm) {
@@ -67,12 +69,16 @@ get_Blim <- function(MSEobj, xR = 0.8, output = c('summary', 'raw')) {
     return(list(MP.summary = MP.summary, OM.summary = OM.summary))
   }
   if(output == 'raw') {
-    B_Blim <- array(NA, dim = c(nsim, nm, proyears))
-    for(m in 1:nm) {
-      for(j in 1:nsim) B_Blim[j, m, ] <- MSEobj@SSB[j, m, ]/Blim[j]
+    if(magnitude == 'absolute') return(Blim)
+    if(magnitude == 'relative') {
+      B_Blim <- array(NA, dim = c(nsim, nm, proyears))
+      for(m in 1:nm) {
+        for(j in 1:nsim) B_Blim[j, m, ] <- MSEobj@SSB[j, m, ]/Blim[j]
+      }
+      return(B_Blim)
     }
-    return(B_Blim)
   }
+  
 }
 
 
