@@ -66,6 +66,7 @@ f_BHE <- function(CAL, CAL_bins, Linf, K, M) {
 
 # f = F0.1/(Z-M) from GH (w/effort?)
 f_GH <- function(CAL, CAL_bins, LFS, Linf, K, M, wla, wlb) {
+  if(LFS > 0.95 * min(Linf)) LFS <- 0.95 * min(Linf)
   Lmean <- numeric(length = dim(CAL)[1])
   ss <- numeric(length = dim(CAL)[1])
   Lc.ind <- which(LFS <= CAL_bins)[1]
@@ -90,6 +91,7 @@ f_GH <- function(CAL, CAL_bins, LFS, Linf, K, M, wla, wlb) {
 
 # f = F0.1/F from GH
 f_GHeffort <- function(CAL, CAL_bins, effort, Linf, K, M, t0, wla, wlb, LFS, MaxAge) {
+  if(LFS > 0.95 * min(Linf)) LFS <- 0.95 * min(Linf)
   Lmean <- numeric(length = dim(CAL)[1])
   ss <- numeric(length = dim(CAL)[1])
   Lc.ind <- which(LFS <= CAL_bins)[1]
@@ -117,7 +119,7 @@ f_GHeffort <- function(CAL, CAL_bins, effort, Linf, K, M, t0, wla, wlb, LFS, Max
     #                 Lc = LFS, eff_init = effort[1], n_age = MaxAge,
     #                 method = "BFGS",
     #                 control = list(maxit = 1e+06), hessian = FALSE), silent = TRUE)
-    if(inherits(opt, "try-error")) {
+    if(inherits(opt, "try-error") || opt$par[2] <= 0) {
       Fcurr[i] <- F01[i] <- NA
     } else {
       Fcurr[i] <- opt$par[1] * effort[length(effort)]
