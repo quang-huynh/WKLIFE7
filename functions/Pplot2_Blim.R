@@ -1,4 +1,4 @@
-Pplot2_Blim <- function (MSEobj, YVar = c("SSB_SSBlim", "F_FMSY"), MPs = NA, 
+Pplot2_Blim <- function (MSEobj, Hist, YVar = c("SSB_SSBlim", "F_FMSY", "Yield"), MPs = NA, 
           sims = NULL, traj = c("all", "quant"), quants = c(0.1, 0.9), 
           incquant = TRUE, quantcol = "lightgray", RefYield = c("lto", "curr"), 
           HistoricalYr = FALSE, LastYr = TRUE, maxMP = 6, alpha = 60, cex.axis = 1.35, 
@@ -56,26 +56,19 @@ Pplot2_Blim <- function (MSEobj, YVar = c("SSB_SSBlim", "F_FMSY"), MPs = NA,
     Dat$Yield <- Dat$Yield[, , 2:proyears, drop = FALSE]
   }
   
-  SSB_hist.areasum <- rowSums(MSEobj@SSB_hist, dims = 3) # sum over areas
-  SSB_hist.agesum <- matrix(0, nrow = nsim, ncol = nyears) # next sum over ages
-  for(i in 1:dim(MSEobj@SSB_hist)[2]) SSB_hist.agesum <- SSB_hist.agesum + SSB_hist.areasum[, i, ]
-  
-  FM_hist.areasum <- rowSums(MSEobj@FM_hist, dims = 3) # sum over areas
-  FM_hist.agesum <- matrix(0, nrow = nsim, ncol = nyears) # next sum over ages
-  for(i in 1:dim(MSEobj@FM_hist)[2]) FM_hist.agesum <- FM_hist.agesum + FM_hist.areasum[, i, ]
-  
-  CB_hist.areasum <- rowSums(MSEobj@CB_hist, dims = 3) # sum over areas
-  CB_hist.agesum <- matrix(0, nrow = nsim, ncol = nyears) # next sum over ages
-  for(i in 1:dim(MSEobj@CB_hist)[2]) CB_hist.agesum <- CB_hist.agesum + CB_hist.areasum[, i, ]
-  if(RefYield == "lto") Yield.hist <- CB_hist.agesum/MSEobj@OM$RefY
-  if(RefYield == "curr") Yield.hist <- CB_hist.agesum/CB_hist.agesum[, nyears]
+  # Historical years
+  SSB_hist <- apply(MSEobj@SSB_hist, c(1, 3), sum)
+  FM_hist <- Hist$SampPars$qs[sims] * Hist$SampPars$Find[sim, ]
+  CB_hist <- apply(MSEobj@CB_hist, c(1, 3), sum) # sum over areas and ages
+  if(RefYield == "lto") Yield.hist <- CB_hist/MSEobj@OM$RefY
+  if(RefYield == "curr") Yield.hist <- CB_hist/CB_hist[, nyears]
   
   Blim.absolute <- get_Blim(MSEobj, xR = 0.7, output = 'raw', magnitude = 'absolute')
-  DatHist <- list(SSB_SSB0 = SSB_hist.agesum/MSEobj@OM$SSB0,
-                  SSB_SSBMSY = SSB_hist.agesum/MSEobj@OM$SSBMSY,
-                  F_FMSY = FM_hist.agesum/MSEobj@OM$FMSY_M,
+  DatHist <- list(SSB_SSB0 = SSB_hist/MSEobj@OM$SSB0,
+                  SSB_SSBMSY = SSB_hist/MSEobj@OM$SSBMSY,
+                  F_FMSY = FM_hist/MSEobj@OM$FMSY_M,
                   Yield = Yield.hist,
-                  SSB_SSBlim = SSB_hist.agesum/Blim.absolute)
+                  SSB_SSBlim = SSB_hist/Blim.absolute)
   DatHist <- DatHist[YVar]
   
   nr <- length(Dat)
